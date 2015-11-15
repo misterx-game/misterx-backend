@@ -1,4 +1,4 @@
-// Example model
+// Location model
 
 var mongoose = require('mongoose'),
   Schema = mongoose.Schema;

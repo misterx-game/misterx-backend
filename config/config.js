@@ -9,7 +9,15 @@ var config = {
       name: 'misterx-express'
     },
     port: 3001,
-    db: 'mongodb://localhost/misterx-express-development'
+    db: 'mongodb://localhost/misterx-express-development',
+    jwt: {
+      secretOrKey: 'secret',
+      authScheme: 'Bearer'
+    },
+    github: {
+      // clientId: '',
+      // clientSecret: ''
+    }
   },
 
   test: {
