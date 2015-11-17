@@ -15,8 +15,14 @@ var config = {
       authScheme: 'Bearer'
     },
     github: {
-      // clientId: '',
-      // clientSecret: ''
+      client: {
+        // clientId: '',
+        // clientSecret: ''
+      },
+      admin: {
+        // clientId: '',
+        // clientSecret: ''
+      }
     }
   },
 

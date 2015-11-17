@@ -18,27 +18,28 @@ module.exports = function(app, config) {
       }
     });
   }));
-  
-  passport.use(new GitHubStrategy({
-      clientID: config.github.clientId,
-      clientSecret: config.github.clientSecret
-    },
-    function(accessToken, refreshToken, profile, done) {
-      User.findOne({githubId: profile.id}, function(err, user) {
-        if (err) {
-          return done(err, false);
-        }
-        if (user) {
-          return done(null, user);
-        } else {
-          var newUser = new User({ githubId: profile.id });
-          newUser.save(function(err, doc) {
-            return done(null, doc);
-          });
-        }
-      });
-    }
-  ));
+
+  for (var confName in config.github) {
+    passport.use('github-'+confName, new GitHubStrategy({
+        clientID: config.github[confName].clientId,
+        clientSecret: config.github[confName].clientSecret
+      }, function (accessToken, refreshToken, profile, done) {
+        User.findOne({githubId: profile.id}, function (err, user) {
+          if (err) {
+            return done(err, false);
+          }
+          if (user) {
+            return done(null, user);
+          } else {
+            var newUser = new User({ githubId: profile.id });
+            newUser.save(function(err, doc) {
+              return done(null, doc);
+            });
+          }
+        });
+      }
+    ));
+  }
 
   passport.serializeUser(function(user, done) {
     done(null, user._id);

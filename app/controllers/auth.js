@@ -12,14 +12,26 @@ module.exports = function (app) {
   app.use('/auth', router);
 };
 
-router.options('/github', cors({origin: 'http://localhost:3000', credentials: true}));
+var corsOptions = {
+  origin: ['http://localhost:3000', 'http://localhost:3004'],
+  credentials: true
+};
+
+router.options('/github', cors(corsOptions));
 
 router.post('/github', 
-  cors({origin: 'http://localhost:3000', credentials: true}),
+  cors(corsOptions),
   function(req, res, next) {
     req.query = req.body;
-    passport.authenticate('github', 
+    passport.authenticate(function() {
+      for (var confName in config.github) {
+        if (config.github[confName].clientId === req.query.clientId) {
+          return 'github-'+confName;
+        }
+      }
+    }(), 
       function(err, user, info) {
+        if (err) return next(err);
         res.json({"token": jws.sign({
           header: { alg: 'HS256' },
           payload: user._id,
