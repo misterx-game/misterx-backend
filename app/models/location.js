@@ -6,6 +6,7 @@ var mongoose = require('mongoose'),
 var LocationSchema = new Schema({
   lat: Number,
   lng: Number,
+  group: { type: String, default: 'player'},
 });
 
 LocationSchema.virtual('date')
