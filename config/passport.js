@@ -24,14 +24,20 @@ module.exports = function(app, config) {
         clientID: config.github[confName].clientId,
         clientSecret: config.github[confName].clientSecret
       }, function (accessToken, refreshToken, profile, done) {
-        User.findOne({githubId: profile.id}, function (err, user) {
+        User.findOne({'github.id': profile.id}, function (err, user) {
           if (err) {
             return done(err, false);
           }
           if (user) {
             return done(null, user);
           } else {
-            var newUser = new User({ githubId: profile.id });
+            var newUser = new User({
+              github: {
+                id: profile.id,
+                username: profile.username,
+                $ref: profile.profileUrl
+              }
+            });
             newUser.save(function(err, doc) {
               return done(null, doc);
             });

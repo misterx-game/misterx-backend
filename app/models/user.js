@@ -5,7 +5,11 @@ var mongoose = require('mongoose'),
 
 var UserSchema = new Schema({
   id: String,
-  githubId: String
+  github: {
+    id: Number,
+    username: String,
+    $ref: String
+  }
 });
 
 UserSchema.virtual('date')
