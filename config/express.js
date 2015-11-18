@@ -34,6 +34,11 @@ module.exports = function(app, config) {
     require(controller)(app);
   });
 
+  var apis = glob.sync(config.root + '/app/endpoints/*.js');
+  apis.forEach(function (api) {
+    require(api)(app);
+  });
+
   app.use(function (req, res, next) {
     var err = new Error('Not Found');
     err.status = 404;
