@@ -23,24 +23,15 @@ module.exports = function(app, config) {
     passport.use('github-'+confName, new GitHubStrategy({
         clientID: config.github[confName].clientId,
         clientSecret: config.github[confName].clientSecret
-      }, function (accessToken, refreshToken, profile, done) {
+      }, function (accessToken, refreshToken, profile, next) {
         User.findOne({'github.id': profile.id}, function (err, user) {
           if (err) {
-            return done(err, false);
+            return next(err, false);
           }
           if (user) {
-            return done(null, user);
+            return user.updateFromGithub(profile, next);
           } else {
-            var newUser = new User({
-              github: {
-                id: profile.id,
-                username: profile.username,
-                $ref: profile.profileUrl
-              }
-            });
-            newUser.save(function(err, doc) {
-              return done(null, doc);
-            });
+            return User.createFromGithub(profile, next);
           }
         });
       }
