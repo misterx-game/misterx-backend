@@ -13,7 +13,7 @@ module.exports = function (app) {
 };
 
 var corsOptions = {
-  origin: ['http://localhost:3000', 'http://localhost:3004'],
+  origin: config.cors.origin,
   credentials: true
 };
 
