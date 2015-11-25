@@ -5,10 +5,12 @@ var mongoose = require('mongoose'),
 
 var UserSchema = new Schema({
   id: String,
+  active: { type: Boolean, default: true },
+  admin: { type: Boolean, default: false },
   github: {
     id: Number,
     username: String,
-    $ref: String
+    url: String
   }
 });
 
@@ -23,7 +25,7 @@ UserSchema.statics.createFromGithub = function (profile, next) {
     github: {
       id: profile.id,
       username: profile.username,
-      $ref: profile.profileUrl
+      url: profile.profileUrl
     }
   });
   newUser.save(function(err, doc) {
@@ -34,10 +36,17 @@ UserSchema.statics.createFromGithub = function (profile, next) {
 UserSchema.methods.updateFromGithub = function (profile, next) {
   var user = this;
   user.github.username = profile.username;
-  user.github.$ref = profile.profileUrl;
+  user.github.url = profile.profileUrl;
   user.save(function(err, doc) {
     return next(false, user);
   });
+};
+
+UserSchema.methods.isAdmin = function() {
+  return this.admin;
+};
+UserSchema.methods.isGameMaster = function() {
+  return true;
 };
 
 mongoose.model('User', UserSchema);

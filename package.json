@@ -18,6 +18,7 @@
     "method-override": "^2.3.0",
     "mongoose": "^4.1.2",
     "morgan": "^1.6.1",
+    "mustbe": "^0.3.1",
     "passport": "^0.3.2",
     "passport-github2": "^0.1.9",
     "passport-jwt": "^1.2.1",
