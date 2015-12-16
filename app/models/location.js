@@ -7,6 +7,9 @@ var LocationSchema = new Schema({
   lat: Number,
   lng: Number,
   group: { type: String, default: 'player'},
+  client: {
+    time: { type: Date }
+  }
 });
 
 LocationSchema.virtual('date')
