@@ -16,17 +16,22 @@ module.exports = function (app) {
     next();
   };
   noAuth = function(req, res, next) {
-    res.status(401);
-    res.send();
+    res.send(401, 'Authorization failed');
   };
 
   restify.serve(router, Location, {
     version: '',
     prefix: '',
     lowercase: true,
-    preCreate: mustbe.authorized('report location', okAuth, noAuth),
+    preCreate: [
+      mustbe.authorized('report location', okAuth, noAuth),
+      function(req, res, next) {
+        req.body.user = req.user;
+        next();
+      }
+    ],
     preRead: mustbe.authorized('view all locations', okAuth, noAuth),
-    preUpdate: mustbe.authorized('admin ganes', okAuth, noAuth),
+    preUpdate: mustbe.authorized('admin games', okAuth, noAuth),
     preDelete: mustbe.authorized('admin games', okAuth, noAuth)
   });
 };
