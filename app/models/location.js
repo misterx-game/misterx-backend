@@ -9,7 +9,8 @@ var LocationSchema = new Schema({
   group: { type: String, default: 'player'},
   client: {
     time: { type: Date }
-  }
+  },
+  user: { type: Schema.Types.ObjectId, ref: 'User' }
 });
 
 LocationSchema.virtual('date')
