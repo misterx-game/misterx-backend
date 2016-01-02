@@ -4,7 +4,8 @@ var passport = require('passport'),
   JwtStrategy = require('passport-jwt').Strategy,
   GitHubStrategy = require('passport-github2').Strategy,
   ObjectId = require('mongoose').Types.ObjectId,
-  User = mongoose.model('User');
+  User = mongoose.model('User'),
+  Location = mongoose.model('Location');
 
 module.exports = function(app, config) {
 
@@ -68,11 +69,10 @@ module.exports = function(app, config) {
       });
 
       rh.parameterMaps(function(params){
-        params.map('update own item or admin games', function(req) {
-          // store user so we may later check against it
-          // @todo load record from database so we can ensure that noone takes over other users records
+        params.map('update own location or admin games', function(req) {
+          // store db record so we may later check against it
           return {
-            owner: req.body.user
+            record: Location.findOne({_id: req.body._id})
           };
         });
       });
@@ -95,8 +95,12 @@ module.exports = function(app, config) {
       activities.can("view all locations", function(identity, params, cb) {
         cb(null, identity.user.isGameMaster());
       });
-      activities.can("update own item or admin games", function(identity, params, cb) {
-        cb(null, identity.user.isAdmin() || identity.user._id == params.owner);
+      activities.can("update own location or admin games", function(identity, params, cb) {
+        params.record.then(function(data) {
+          cb(null, identity.user.isAdmin() || identity.user._id + '' == data.user);
+        }, function() {
+          cb(null, identity.user.isAdmin());
+        });
       });
       activities.can("admin games", function(identity, params, cb) {
         cb(null, identity.user.isAdmin());
