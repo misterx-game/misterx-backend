@@ -31,7 +31,9 @@ module.exports = function (app) {
       }
     ],
     preRead: mustbe.authorized('view all locations', okAuth, noAuth),
-    preUpdate: mustbe.authorized('admin games', okAuth, noAuth),
+    preUpdate: [
+      mustbe.authorized('update own item or admin games', okAuth, noAuth)
+    ],
     preDelete: mustbe.authorized('admin games', okAuth, noAuth)
   });
 };

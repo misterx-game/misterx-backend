@@ -66,10 +66,19 @@ module.exports = function(app, config) {
       rh.notAuthorized(function(req, res, next){
         res.status(401);
       });
+
+      rh.parameterMaps(function(params){
+        params.map('update own item or admin games', function(req) {
+          // store user so we may later check against it
+          // @todo load record from database so we can ensure that noone takes over other users records
+          return {
+            owner: req.body.user
+          };
+        });
+      });
     });
 
     config.userIdentity(function(id) {
-
       // determine if this user is authenticated or not
       id.isAuthenticated(function(user, cb){
         // note that the "user" in this case, is the user
@@ -85,6 +94,9 @@ module.exports = function(app, config) {
       });
       activities.can("view all locations", function(identity, params, cb) {
         cb(null, identity.user.isGameMaster());
+      });
+      activities.can("update own item or admin games", function(identity, params, cb) {
+        cb(null, identity.user.isAdmin() || identity.user._id == params.owner);
       });
       activities.can("admin games", function(identity, params, cb) {
         cb(null, identity.user.isAdmin());
