@@ -4,7 +4,8 @@ var passport = require('passport'),
   JwtStrategy = require('passport-jwt').Strategy,
   GitHubStrategy = require('passport-github2').Strategy,
   ObjectId = require('mongoose').Types.ObjectId,
-  User = mongoose.model('User');
+  User = mongoose.model('User'),
+  Location = mongoose.model('Location');
 
 module.exports = function(app, config) {
 
@@ -66,10 +67,18 @@ module.exports = function(app, config) {
       rh.notAuthorized(function(req, res, next){
         res.status(401);
       });
+
+      rh.parameterMaps(function(params){
+        params.map('update own location or admin games', function(req) {
+          // store db record so we may later check against it
+          return {
+            record: Location.findOne({_id: req.body._id})
+          };
+        });
+      });
     });
 
     config.userIdentity(function(id) {
-
       // determine if this user is authenticated or not
       id.isAuthenticated(function(user, cb){
         // note that the "user" in this case, is the user
@@ -85,6 +94,13 @@ module.exports = function(app, config) {
       });
       activities.can("view all locations", function(identity, params, cb) {
         cb(null, identity.user.isGameMaster());
+      });
+      activities.can("update own location or admin games", function(identity, params, cb) {
+        params.record.then(function(data) {
+          cb(null, identity.user.isAdmin() || identity.user._id + '' == data.user);
+        }, function() {
+          cb(null, identity.user.isAdmin());
+        });
       });
       activities.can("admin games", function(identity, params, cb) {
         cb(null, identity.user.isAdmin());
