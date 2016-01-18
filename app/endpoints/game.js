@@ -27,7 +27,7 @@ module.exports = function (app) {
       mustbe.authorized('admin games', okAuth, noAuth),
       function(req, res, next) {
         if (new Date(req.body.start) > new Date(req.body.end)) {
-          res.send(400, 'Enddate must be after Startdate');
+          res.send(400, 'End must be after Start');
         }
         next();
       }
