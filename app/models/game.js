@@ -8,6 +8,7 @@ var GameSchema = new Schema({
   name: { type: String, required: 'Name is required', trim: true },
   start: { type: Date, default: Date.now},
   end: { type: Date },
+  playfield: { type: Schema.Types.ObjectId, ref: 'Playfield' },
   roles: [
     { name: { type: String, trim: true } }
   ],
