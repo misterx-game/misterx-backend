@@ -10,13 +10,9 @@ var LocationSchema = new Schema({
   client: {
     time: { type: Date }
   },
-  user: { type: Schema.Types.ObjectId, ref: 'User' }
+  user: { type: Schema.Types.ObjectId, ref: 'User' },
+  game: { type: Schema.Types.ObjectId, ref: 'Game' }
 });
-
-LocationSchema.virtual('date')
-  .get(function(){
-    return this._id.getTimestamp();
-  });
 
 mongoose.model('Location', LocationSchema);
 

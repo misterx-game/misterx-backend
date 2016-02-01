@@ -7,6 +7,7 @@ var express = require('express'),
   router = express.Router(),
   Location = mongoose.model('Location');
 
+
 module.exports = function (app) {
   app.use(cors());
   app.use(passport.authenticate('jwt', { session: false }));
@@ -27,6 +28,7 @@ module.exports = function (app) {
       mustbe.authorized('report location', okAuth, noAuth),
       function(req, res, next) {
         req.body.user = req.user;
+        req.body.game = req.body.game; // if we don't do that, mongoose doesn't recognise the OjectID
         next();
       }
     ],

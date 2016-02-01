@@ -28,8 +28,9 @@ module.exports = function (app) {
       function(req, res, next) {
         if (new Date(req.body.start) > new Date(req.body.end)) {
           res.send(400, 'End must be after Start');
+        } else {
+          next();
         }
-        next();
       }
     ],
     preUpdate: [
