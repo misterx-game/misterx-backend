@@ -2,10 +2,11 @@
 
 var GeoJSON = require('mongoose-geojson-schema');
 var mongoose = require('mongoose'),
-  Schema = mongoose.Schema;
+Schema = mongoose.Schema;
 
 var PlayfieldSchema = new Schema({
-  geoFeature:GeoJSON.Feature
+  name: String,
+  geoFeature: GeoJSON.GeometryCollection
 });
 
 mongoose.model('Playfield', PlayfieldSchema);
