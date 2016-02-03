@@ -11,6 +11,11 @@ var UserSchema = new Schema({
     id: Number,
     username: String,
     url: String
+  },
+  facebook: {
+    id: Number,
+    username: String,
+    url: String
   }
 });
 
