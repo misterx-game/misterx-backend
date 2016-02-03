@@ -42,6 +42,28 @@ UserSchema.methods.updateFromGithub = function (profile, next) {
   });
 };
 
+UserSchema.statics.createFromFacebook = function (profile, next) {
+  var newUser = new this({
+    facebook: {
+      id: profile.id,
+      username: profile.username,
+      url: profile.profileUrl
+    }
+  });
+  newUser.save(function(err, doc) {
+    return next(false, doc);
+  });
+};
+
+UserSchema.methods.updateFromFacebook = function (profile, next) {
+  var user = this;
+  user.facebook.username = profile.username;
+  user.facebook.url = profile.profileUrl;
+  user.save(function(err, doc) {
+    return next(false, user);
+  });
+};
+
 UserSchema.methods.isAdmin = function() {
   return this.admin;
 };

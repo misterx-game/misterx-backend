@@ -17,13 +17,14 @@
     "jws": "^3.1.0",
     "method-override": "^2.3.0",
     "mongoose": "^4.1.2",
+    "mongoose-geojson-schema": "0.0.2",
     "morgan": "^1.6.1",
     "mustbe": "^0.3.1",
     "passport": "^0.3.2",
+    "passport-facebook": "^2.1.0",
     "passport-github2": "^0.1.9",
     "passport-jwt": "^1.2.1",
-    "serve-favicon": "^2.3.0",
-    "mongoose-geojson-schema": "0.0.2"
+    "serve-favicon": "^2.3.0"
   },
   "devDependencies": {
     "gulp": "^3.9.0",

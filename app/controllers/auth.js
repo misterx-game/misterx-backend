@@ -19,7 +19,7 @@ var corsOptions = {
 
 router.options('/github', cors(corsOptions));
 
-router.post('/github', 
+router.post('/github',
   cors(corsOptions),
   function(req, res, next) {
     req.query = req.body;
@@ -29,7 +29,31 @@ router.post('/github',
           return 'github-'+confName;
         }
       }
-    }(), 
+    }(),
+      function(err, user, info) {
+        if (err) return next(err);
+        res.json({"token": jws.sign({
+          header: { alg: 'HS256' },
+          payload: user._id,
+          secret: config.jwt.secretOrKey
+        })});
+        next();
+      })(req, res, next);
+  });
+
+router.options('/facebook', cors(corsOptions));
+
+router.post('/facebook',
+  cors(corsOptions),
+  function(req, res, next) {
+    req.query = req.body;
+    passport.authenticate(function() {
+      for (var confName in config.facebook) {
+        if (config.facebook[confName].clientId === req.query.clientId) {
+          return 'facebook-'+confName;
+        }
+      }
+    }(),
       function(err, user, info) {
         if (err) return next(err);
         res.json({"token": jws.sign({

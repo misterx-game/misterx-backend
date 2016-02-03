@@ -3,6 +3,7 @@ var passport = require('passport'),
   mongoose = require('mongoose'),
   JwtStrategy = require('passport-jwt').Strategy,
   GitHubStrategy = require('passport-github2').Strategy,
+  FacebookStategy = require('passport-facebook').Strategy,
   ObjectId = require('mongoose').Types.ObjectId,
   User = mongoose.model('User'),
   Location = mongoose.model('Location');
@@ -36,6 +37,25 @@ module.exports = function(app, config) {
             return user.updateFromGithub(profile, next);
           } else {
             return User.createFromGithub(profile, next);
+          }
+        });
+      }
+    ));
+  }
+
+ for (var confName in config.facebook) {
+    passport.use('facebook-'+confName, new FacebookStategy({
+        clientID: config.facebook[confName].clientId,
+        clientSecret: config.facebook[confName].clientSecret
+      }, function (accessToken, refreshToken, profile, next) {
+        User.findOne({'facebook.id': profile.id}, function (err, user) {
+          if (err) {
+            return next(err, false);
+          }
+          if (user) {
+            return user.updateFromFacebook(profile, next);
+          } else {
+            return User.createFromFacebook(profile, next);
           }
         });
       }
