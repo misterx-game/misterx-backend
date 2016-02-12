@@ -10,7 +10,7 @@ var GameSchema = new Schema({
   end: { type: Date },
   playfield: { type: Schema.Types.ObjectId, ref: 'Playfield' },
   roles: [
-    { name: { type: String, trim: true } }
+    { name: { type: String, enum: ["Player", "Agent"] } }
   ],
   groups: [
     { name: { type: String, trim: true } }
@@ -18,4 +18,3 @@ var GameSchema = new Schema({
 });
 
 mongoose.model('Game', GameSchema);
-

@@ -6,7 +6,7 @@ var mongoose = require('mongoose'),
 var LocationSchema = new Schema({
   lat: Number,
   lng: Number,
-  group: { type: String, default: 'player'},
+  role: { type: String, default: 'player'},
   client: {
     time: { type: Date }
   },
