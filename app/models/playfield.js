@@ -1,12 +1,11 @@
 // Playfield model
 
-var GeoJSON = require('mongoose-geojson-schema'),
-  mongoose = require('mongoose'),
+var mongoose = require('mongoose'),
   Schema = mongoose.Schema;
 
 var PlayfieldSchema = new Schema({
-  name: String,
-  geoFeature: GeoJSON.GeometryCollection
+  "name": String,
+  "geometry": [Schema.Types.Mixed]
 });
 
 mongoose.model('Playfield', PlayfieldSchema);
