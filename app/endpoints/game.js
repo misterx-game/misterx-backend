@@ -5,8 +5,7 @@ var express = require('express'),
   restify = require('express-restify-mongoose'),
   mustbe = require("mustbe").routeHelpers(),
   router = express.Router(),
-  Location = mongoose.model('Location');
-
+  Game = mongoose.model('Game');
 
 module.exports = function (app) {
   app.use(cors());
@@ -20,21 +19,22 @@ module.exports = function (app) {
     res.send(401, 'Authorization failed');
   };
 
-  restify.serve(router, Location, {
+  restify.serve(router, Game, {
     version: '',
     prefix: '',
     lowercase: true,
     preCreate: [
-      mustbe.authorized('report location', okAuth, noAuth),
+      mustbe.authorized('admin games', okAuth, noAuth),
       function(req, res, next) {
-        req.body.user = req.user;
-        req.body.game = req.body.game; // if we don't do that, mongoose doesn't recognise the OjectID
-        next();
+        if (new Date(req.body.start) > new Date(req.body.end)) {
+          res.send(400, 'End must be after Start');
+        } else {
+          next();
+        }
       }
     ],
-    preRead: mustbe.authorized('view all locations', okAuth, noAuth),
     preUpdate: [
-      mustbe.authorized('update own location or admin games', okAuth, noAuth)
+      mustbe.authorized('admin games', okAuth, noAuth)
     ],
     preDelete: mustbe.authorized('admin games', okAuth, noAuth)
   });

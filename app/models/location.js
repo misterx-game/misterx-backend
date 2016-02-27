@@ -6,17 +6,13 @@ var mongoose = require('mongoose'),
 var LocationSchema = new Schema({
   lat: Number,
   lng: Number,
-  group: { type: String, default: 'player'},
+  role: { type: String, default: 'player'},
   client: {
     time: { type: Date }
   },
-  user: { type: Schema.Types.ObjectId, ref: 'User' }
+  user: { type: Schema.Types.ObjectId, ref: 'User' },
+  game: { type: Schema.Types.ObjectId, ref: 'Game' }
 });
-
-LocationSchema.virtual('date')
-  .get(function(){
-    return this._id.getTimestamp();
-  });
 
 mongoose.model('Location', LocationSchema);
 
