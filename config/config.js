@@ -117,6 +117,33 @@ var config = {
       origin: [
       ]
     }
+  },
+
+  docker: {
+    root: rootPath,
+    app: {
+      name: 'misterx-backend'
+    },
+    port: 3000,
+    db: 'mongodb://' + process.env.MONGODB_PORT_27017_TCP_ADDR + '/misterx',
+    jwt: {
+      secretOrKey: process.env.JWT_SECRET,
+      authScheme: process.env.JWT_AUTHSCHEME
+    },
+    github: {
+      client: {
+        clientId: process.env.GITHUB_CLIENT_ID,
+        clientSecret: process.env.GITHUB_CLIENT_SECRET
+      },
+      admin: {
+        clientId: process.env.GITHUB_ADMIN_ID,
+        clientSecret: process.env.GITHUB_ADMIN_SECRET
+      }
+    },
+    cors: {
+      origin: [
+      ]
+    }
   }
 };
 
