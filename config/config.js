@@ -125,7 +125,7 @@ var config = {
       name: 'misterx-backend'
     },
     port: 3000,
-    db: 'mongodb://' + process.env.MONGODB_PORT_27017_TCP_ADDR + '/misterx',
+    db: 'mongodb://' + process.env.MONGODB_PORT_27017_TCP_ADDR + ':' + process.env.MONGODB_PORT_27017_TCP_PORT + '/misterx',
     jwt: {
       secretOrKey: process.env.JWT_SECRET,
       authScheme: process.env.JWT_AUTHSCHEME
